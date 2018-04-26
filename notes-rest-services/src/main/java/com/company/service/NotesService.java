@@ -5,10 +5,7 @@ import com.company.model.Note;
 import com.google.common.collect.Lists;
 import org.springframework.stereotype.Component;
 
-import java.util.Date;
-import java.util.List;
-import java.util.Optional;
-import java.util.UUID;
+import java.util.*;
 
 import static java.lang.String.format;
 
@@ -18,24 +15,39 @@ public class NotesService {
 
     private static List<Note> notesList = Lists.newArrayList();
 
-    private Optional <Note> findNoteByName(String name) {
+    static {
+        //Initialize some Data
+        notesList.add(new Note(UUID.randomUUID().toString(), "Note first", "First message"));
+        notesList.add(new Note(UUID.randomUUID().toString(), "Note second", "Second message"));
+    }
+
+    private Optional<Note> findNoteByName(String name) {
         return notesList
                 .stream()
                 .filter(nl -> nl.getId().equals(name))
                 .findFirst();
     }
 
-    public Note putNote(String noteName, String message) {
+    public String putNote(String noteName, String message) {
         // ToDo resolve conflicts when notes will has same names
+        Note note = new Note(UUID.randomUUID().toString(), noteName, message);
+        final boolean added = notesList.add(note);
+        if (added) {
+            return note.getId();
+        } else {
+            throw new RuntimeException(format("Cannot save data note with name: %s", noteName));
+        }
+    }
+
+    public Note updateNote(String noteName, String message) {
+        // ToDo implement update
         Note note = new Note(UUID.randomUUID().toString(), noteName, message);
         final boolean added = notesList.add(note);
         if (added) {
             return note;
         }
-
-        throw new RuntimeException(format("Cannot save data note with name: %s", noteName));
+        throw new RuntimeException(format("Cannot update data note with name: %s", noteName));
     }
-
 
     public List<Note> retrieveAllNotes() {
         return notesList;
@@ -44,16 +56,17 @@ public class NotesService {
     public List<Note> findByKeyWord(String keyWord) {
         List<Note> foundNotes = Lists.newArrayList();
         for (Note note : NotesService.notesList) {
-            if (note.getMessage().compareTo(keyWord)>0) {
+            if (note.getMessage().contains(keyWord)) {
                 foundNotes.add(note);
             }
         }
-        if (foundNotes.isEmpty()){
-            throw new NoteNotFoundException((format("Cannot find note by key word id: %s", keyWord)));
+        if (foundNotes.isEmpty()) {
+            throw new NoteNotFoundException((format("Cannot find note by key word \"%s\"", keyWord)));
         } else {
             return foundNotes;
         }
     }
+
     private Note findNoteById(String id) {
         return notesList
                 .stream()
@@ -67,9 +80,9 @@ public class NotesService {
     }
 
     public void deleteNoteById(String noteId) {
-        for (Note note : NotesService.notesList) {
+        for (Note note : notesList) {
             if (note.getId().equals(noteId)) {
-                NotesService.notesList.remove(note);
+                notesList.remove(note);
                 return;
             }
         }

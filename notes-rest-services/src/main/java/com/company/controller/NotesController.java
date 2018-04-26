@@ -15,40 +15,46 @@ public class NotesController {
     @Autowired
     private NotesService notesService;
 
+
+    @PutMapping("/putNote/{noteName}")
+    public ResponseEntity<String> putNote(@PathVariable String noteName, @RequestBody String noteBody) {
+        String noteId = notesService.putNote(noteName, noteBody);
+        return ResponseEntity.status(HttpStatus.CREATED).body(noteId);
+    }
+
     /*@GetMapping("/updates/{noteId}/")
     public List<Date> retrieveAllUpdateForNote(@PathVariable String noteId) {
         return notesService.whenUpdates(noteId);
     }*/
-
 
     @GetMapping("/allNotes")
     public List<Note> getAllNotes() {
         return notesService.retrieveAllNotes();
     }
 
-    @GetMapping("/getById/{id}")
-    public Note getNoteById(@PathVariable("id") String id) {
-        return notesService.getNoteById(id);
+    @GetMapping("/getById/{param}")
+    public Note getNoteById(@PathVariable("param") String param) {
+        return notesService.getNoteById(param);
     }
 
-    @GetMapping("/getByName/{name}")
-    public Note getNoteByName(@PathVariable("name") String name) {
-        return notesService.getNoteById(name);
+    @GetMapping("/getByName/{param}")
+    public Note getNoteByName(@PathVariable("param") String param) {
+        return notesService.getNoteByName(param);
     }
 
-    @DeleteMapping("/{id}")
-    public ResponseEntity deleteNote(@PathVariable("id") String id) {
-        notesService.deleteNoteById(id);
+    @DeleteMapping("/delByName/{param}")
+    public ResponseEntity delByName(@PathVariable("param") String param) {
+        notesService.deleteNoteByName(param);
         return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
     }
 
-    @PutMapping("/{noteName}/")
-    public ResponseEntity<Void> putNote(@PathVariable String noteName, @RequestBody String noteBody) {
-        notesService.putNote(noteName, noteBody);
-        return ResponseEntity.status(HttpStatus.CREATED).build();
+    @DeleteMapping("/delById/{param}")
+    public ResponseEntity delById(@PathVariable("param") String param) {
+        notesService.deleteNoteById(param);
+        return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
     }
 
-    @PostMapping("/findNotes/")
+    @PostMapping("/findNotes")
     public List<Note> retrieveByPartOfBody(@RequestBody String noteBody) {
         return notesService.findByKeyWord(noteBody);
     }
