@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<web-app xmlns="http://xmlns.jcp.org/xml/ns/javaee"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://xmlns.jcp.org/xml/ns/javaee http://xmlns.jcp.org/xml/ns/javaee/web-app_4_0.xsd"
+         version="4.0">
+    <servlet>
+        <servlet-name>com.company.Notes NotesService</servlet-name>
+        <servlet-class>com.company.server.NotesServiceImpl</servlet-class>
+    </servlet>
+    <!--
+        <servlet>
+            <servlet-name>com.google.gwt.sample.dynatable.DynaTable SchoolCalendarService</servlet-name>
+            <servlet-class>com.google.gwt.sample.dynatable.server.SchoolCalendarServiceImpl</servlet-class>
+        </servlet>
+    -->
+    <servlet-mapping>
+        <servlet-name>com.company.Notes NotesService</servlet-name>
+        <url-pattern>/company/NotesService</url-pattern>
+    </servlet-mapping>
+<!--
+    <servlet-mapping>
+        <servlet-name>com.google.gwt.sample.dynatable.DynaTable SchoolCalendarService</servlet-name>
+        <url-pattern>/dynatable/calendar</url-pattern>
+    </servlet-mapping>
+-->
+
+    <!-- Default page to serve -->
+    <welcome-file-list>
+        <welcome-file>Notes.html</welcome-file>
+    </welcome-file-list>
+</web-app>

@@ -1,0 +1,20 @@
+body, td, a, div, table ,.p {
+    font-family: arial, sans-serif
+}
+
+h1 {
+    font-size: 2em;
+    font-weight: bold;
+    text-align: center;
+}
+
+table {
+    align: center;
+    border: 2px Black;
+    text-align: center;
+}
+
+table.capture {
+    align: top;
+    text-align: center;
+}
