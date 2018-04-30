@@ -46,7 +46,8 @@ public class NotesServiceImpl extends RemoteServiceServlet implements NotesServi
     }
 
     public List<Note> findByKeyWord(String keyWord) {
-        return restConnector.retrieveByKeyWord(keyWord);
+        return null;
+//        return restConnector.retrieveByKeyWord(keyWord);
     }
 
      /*public Note getNoteById(String noteId) {

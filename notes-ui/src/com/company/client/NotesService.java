@@ -8,9 +8,8 @@ import java.util.List;
 
 @RemoteServiceRelativePath("NotesService")
 public interface NotesService extends RemoteService {
-    // Sample interface method of remote interface
     String getMessage(String msg);
-    // Sample interface method of remote interface
+
     List<Note> retrieveAllNotes();
 
     List<Note> findByKeyWord(String key);

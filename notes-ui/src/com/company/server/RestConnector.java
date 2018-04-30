@@ -9,7 +9,6 @@ import com.mashape.unirest.http.exceptions.UnirestException;
 import org.apache.http.HttpHeaders;
 import org.apache.log4j.Logger;
 
-import javax.management.AttributeList;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -41,55 +40,39 @@ public class RestConnector {
         if (userPassword == null) throw new IllegalArgumentException("User password is not specified.");
     }
 
-    public static void main(String[] args) {
-
+    public List<Note> retrieveAllNotes() {
         try {
-            RestConnector restConnector = new RestConnector();
-            restConnector.retrieveAllNotes();
-
-
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-    }
-
-
-    public static List<Note> retrieveAllNotes() {
-
-        ArrayList<Note> noteArrayList = new ArrayList<>();
-        try {
-
             final HttpResponse<String> response =
                     Unirest.get(endpoint + "/getAll")
 //                                                    .header("x-access-token", authToken)
                             .header(HttpHeaders.CONTENT_TYPE, "application/json")
                             //                        .body(new Gson().toJson(strings))
                             .asObject(String.class);
-            //ToDo Implement  deserialization of ArrayList
-            StringBuilder responseBody = new StringBuilder(response.getBody());
-            responseBody.insert(0,"{\"notes\":");
-            responseBody.append("}");
-            LinkedTreeMap linkedTreeMap = new Gson().fromJson(responseBody.toString(), LinkedTreeMap.class);
-            logger.debug(String.format("Response is %s", responseBody));
-            for (LinkedTreeMap restNoteList : (ArrayList<LinkedTreeMap>) linkedTreeMap.get("notes")) {
-//                Note note = new Gson().fromJson(restNoteList.toString(), Note.class);
-                noteArrayList.add(new Note(restNoteList.get("id").toString(),
-                        restNoteList.get("name").toString(),
-                        restNoteList.get("message").toString()));
-            }
-            /*if (linkedTreeMap == null) {
-            //ToDo return empty list
-            return null;
-            }*/
+            return deSerializeList(response.getBody());
         } catch (UnirestException e) {
             logger.error(e);
             e.printStackTrace();
             throw new IllegalStateException("Auth is not successful. Was not able to get result");
         }
+    }
+
+    private List<Note> deSerializeList(String response){
+        logger.debug(String.format("Response is %s", response));
+        StringBuilder responseBody = new StringBuilder(response);
+        responseBody.insert(0, "{\"notes\":");
+        responseBody.append("}");
+        ArrayList<Note> noteArrayList = new ArrayList<>();
+        for (LinkedTreeMap restNoteList : (ArrayList<LinkedTreeMap>)
+                new Gson().fromJson(responseBody.toString(), LinkedTreeMap.class).get("notes")) {
+//                Note note = new Gson().fromJson(restNoteList.toString(), Note.class);
+            noteArrayList.add(new Note(restNoteList.get("id").toString(),
+                    restNoteList.get("name").toString(),
+                    restNoteList.get("message").toString()));
+        }
         return noteArrayList;
     }
 
-    public static List<Note> retrieveByKeyWord(String keyWord) {
+    /*public List<Note> retrieveByKeyWord(String keyWord) {
         List<Note> noteArrayList = new ArrayList<>();
         try {
             final HttpResponse<String> response =
@@ -100,7 +83,7 @@ public class RestConnector {
                             .asObject(String.class);
             //ToDo Implement  deserialization of ArrayList
             StringBuilder responseBody = new StringBuilder(response.getBody());
-            responseBody.insert(0,"{\"notes\":");
+            responseBody.insert(0, "{\"notes\":");
             responseBody.append("}");
             LinkedTreeMap linkedTreeMap = new Gson().fromJson(responseBody.toString(), LinkedTreeMap.class);
             logger.debug(String.format("Response is %s", responseBody));
@@ -110,14 +93,14 @@ public class RestConnector {
                         restNoteList.get("name").toString(),
                         restNoteList.get("message").toString()));
             }
-            /*if (linkedTreeMap == null) {
+            *//*if (linkedTreeMap == null) {
             //ToDo return empty list
             return null;
-            }*/
+            }*//*
         } catch (UnirestException e) {
             e.printStackTrace();
             throw new IllegalStateException("Auth is not successful. Was not able to get result");
         }
         return noteArrayList;
-    }
+    }*/
 }
