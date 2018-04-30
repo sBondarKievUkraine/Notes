@@ -13,6 +13,8 @@ public interface NotesService extends RemoteService {
     // Sample interface method of remote interface
     List<Note> retrieveAllNotes();
 
+    List<Note> findByKeyWord(String key);
+
 
     public static class App {
         private static NotesServiceAsync ourInstance = GWT.create(NotesService.class);

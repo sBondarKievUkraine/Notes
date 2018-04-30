@@ -1,17 +1,19 @@
 package com.company.server;
 
 import com.company.client.Note;
-import com.google.gwt.user.server.rpc.RemoteServiceServlet;
 import com.company.client.NotesService;
+import com.google.gson.Gson;
+import com.google.gson.internal.LinkedTreeMap;
+import com.google.gwt.user.server.rpc.RemoteServiceServlet;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 import java.util.UUID;
 
 public class NotesServiceImpl extends RemoteServiceServlet implements NotesService {
 
     private static List<Note> notesList = new ArrayList<>();
+
     static {
         //Initialize some Data
         notesList.add(new Note("6fdc3f7b-a59c-4dcc-b2b0-1d171d3880bb", "First note name", "First message body"));
@@ -19,6 +21,8 @@ public class NotesServiceImpl extends RemoteServiceServlet implements NotesServi
         notesList.add(new Note(UUID.randomUUID().toString(), "Third note name", "Third message body"));
         notesList.add(new Note(UUID.randomUUID().toString(), "Fourth note name", "Fourth message body"));
     }
+
+    private static RestConnector restConnector = new RestConnector();
 
     /*private Note findNoteById(String id) {
     }
@@ -38,25 +42,14 @@ public class NotesServiceImpl extends RemoteServiceServlet implements NotesServi
     }
 
     public List<Note> retrieveAllNotes() {
-        //ToDO Implement call rest service
-        /*final HttpResponse<String> response =
-                Unirest.post(endpoint + "/gtAll")
-//                        .header("x-access-token", authToken)
-                        .header(HttpHeaders.CONTENT_TYPE, "application/json")
-                        .body(new Gson().toJson(strings))
-                        .asObject(String.class);
-        Map<String, Object> map = new Gson().fromJson(response.getBody(), LinkedTreeMap.class);
-        logger.debug(String.format("Response is %s", response.getBody()));
-        if (map == null || !map.containsKey("fields"))
-            throw new IllegalStateException("Auth is not successful. Was not able to get result");
-//        return (String) ((Map) map.get("fields")).get("id");*/
-        return notesList;
+        return restConnector.retrieveAllNotes();
     }
 
-    /*public List<Note> findByKeyWord(String keyWord) {
+    public List<Note> findByKeyWord(String keyWord) {
+        return restConnector.retrieveByKeyWord(keyWord);
     }
 
-    public Note getNoteById(String noteId) {
+     /*public Note getNoteById(String noteId) {
         return findNoteById(noteId);
     }
 

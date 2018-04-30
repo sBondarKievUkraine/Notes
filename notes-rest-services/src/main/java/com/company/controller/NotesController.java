@@ -1,7 +1,6 @@
 package com.company.controller;
 
 import java.util.List;
-
 import com.company.model.Note;
 import com.company.service.NotesService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,12 +21,7 @@ public class NotesController {
         return ResponseEntity.status(HttpStatus.CREATED).body(noteId);
     }
 
-    /*@GetMapping("/updates/{noteId}/")
-    public List<Date> retrieveAllUpdateForNote(@PathVariable String noteId) {
-        return notesService.whenUpdates(noteId);
-    }*/
-
-    @GetMapping("/allNotes")
+    @GetMapping("/getAll")
     public List<Note> getAllNotes() {
         return notesService.retrieveAllNotes();
     }
@@ -42,6 +36,18 @@ public class NotesController {
         return notesService.getNoteByName(param);
     }
 
+    @PostMapping("/updateById/{param}")
+    public ResponseEntity updateById(@PathVariable("param") String param, @RequestBody String noteBody) {
+        notesService.updateNoteById(param, noteBody);
+        return ResponseEntity.status(HttpStatus.OK).build();
+    }
+
+    @PostMapping("/updateByName/{param}")
+    public ResponseEntity updateByName(@PathVariable("param") String param, @RequestBody String noteBody) {
+        notesService.updateNoteByName(param, noteBody);
+        return ResponseEntity.status(HttpStatus.OK).build();
+    }
+
     @DeleteMapping("/delByName/{param}")
     public ResponseEntity delByName(@PathVariable("param") String param) {
         notesService.deleteNoteByName(param);
@@ -54,7 +60,7 @@ public class NotesController {
         return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
     }
 
-    @PostMapping("/findNotes")
+    @PostMapping("/retrieveByPartOfBody")
     public List<Note> retrieveByPartOfBody(@RequestBody String noteBody) {
         return notesService.findByKeyWord(noteBody);
     }

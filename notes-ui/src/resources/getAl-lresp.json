@@ -1,0 +1,37 @@
+{
+  "notes": [
+    {
+      "id": "319c4140-e128-4c32-892b-0fb2ea7398fb",
+      "name": "Second note name",
+      "message": "Second message body",
+      "updateDates": [
+        "2018-04-30T05:09:23.667+0000"
+      ]
+    },
+    {
+      "id": "abfccd23-03b3-4d20-8c47-6c5d3238d194",
+      "name": "Third note name",
+      "message": "Third message body",
+      "updateDates": [
+        "2018-04-30T05:09:23.667+0000"
+      ]
+    },
+    {
+      "id": "484ca52c-fd11-4eeb-b702-789613af910e",
+      "name": "Fourth note name",
+      "message": "Fourth message body",
+      "updateDates": [
+        "2018-04-30T05:09:23.667+0000"
+      ]
+    },
+    {
+      "id": "6fdc3f7b-a59c-4dcc-b2b0-1d171d3880bb",
+      "name": "First note name",
+      "message": "Note updated",
+      "updateDates": [
+        "2018-04-30T05:09:23.667+0000",
+        "2018-04-30T05:14:33.979+0000"
+      ]
+    }
+  ]
+}

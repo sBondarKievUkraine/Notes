@@ -12,26 +12,50 @@ import java.util.List;
 /**
  * Entry point classes define <code>onModuleLoad()</code>
  */
-public class Notes implements EntryPoint {
+public class NotesEntryPoint implements EntryPoint {
 
     /**
      * This is the entry point method.
      */
     public void onModuleLoad() {
-        final Button button = new Button("getAll");
+        final Button allButton = new Button("All");
+        final Button findButton = new Button("Find");
         final Label name = new Label();
         final Label body = new Label();
         final List<Note> noteList = new ArrayList<>();
 
-        NotesService.App.getInstance().retrieveAllNotes(new getAllCllack(noteList));
 
+//        NotesService.App.getInstance().retrieveAllNotes(new getAllCllack(noteList));
 
-        button.addClickHandler(new ClickHandler() {
+        allButton.addClickHandler(new ClickHandler() {
             public void onClick(ClickEvent event) {
                 if (name.getText().equals("")) {
 //                    NotesService.App.getInstance().getMessage("Hello, World!", new MyAsyncCallback(name));
+                    NotesService.App.getInstance().retrieveAllNotes(new getAllCllack(noteList));
+                    StringBuilder names= new StringBuilder(),bodys= new StringBuilder();
+                    for (Note note : noteList) {
+                        names.append(note.getName()+"\n");
+                        names.append("\n");
+                        bodys.append(note.getMessage()+"\n");
+                        bodys.append("\n");
 
-                    StringBuilder names= new StringBuilder();StringBuilder bodys= new StringBuilder();
+                    }
+                    name.setText(names.toString());
+                    body.setText(bodys.toString());
+                } else {
+                    name.setText("");
+                    body.setText("");
+                }
+            }
+        });
+        String keyWord = "Second";
+        findButton.addClickHandler(new ClickHandler() {
+            public void onClick(ClickEvent event) {
+                if (name.getText().equals("")) {
+                    NotesService.App.getInstance().findByKeyWord(keyWord,new getAllCllack(noteList));
+//                    NotesService.App.getInstance().getMessage("Hello, World!", new MyAsyncCallback(name));
+
+                    StringBuilder names= new StringBuilder(),bodys= new StringBuilder();
                     for (Note note : noteList) {
                         names.append(note.getName()+"\n");
                         names.append("\n");
@@ -48,7 +72,8 @@ public class Notes implements EntryPoint {
             }
         });
 
-        RootPanel.get("button").add(button);
+        RootPanel.get("button").add(allButton);
+        RootPanel.get("button").add(findButton);
         RootPanel.get("name").add(name);
         RootPanel.get("body").add(body);
     }
