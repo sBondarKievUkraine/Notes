@@ -8,11 +8,16 @@ import java.util.List;
 
 @RemoteServiceRelativePath("NotesService")
 public interface NotesService extends RemoteService {
-    String getMessage(String msg);
 
     List<Note> retrieveAllNotes();
 
     List<Note> findByKeyWord(String key);
+
+    String putNote(String name, String msg);
+
+    String deleteNoteByName(String delName);
+
+    String updateNoteByName(String updateName, String updateMsg);
 
 
     public static class App {
