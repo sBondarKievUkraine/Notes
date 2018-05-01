@@ -7,6 +7,7 @@ import com.mashape.unirest.http.HttpResponse;
 import com.mashape.unirest.http.Unirest;
 import com.mashape.unirest.http.exceptions.UnirestException;
 import org.apache.http.HttpHeaders;
+import org.apache.http.HttpStatus;
 import org.apache.log4j.Logger;
 
 import java.util.ArrayList;
@@ -43,10 +44,9 @@ public class RestConnector {
     public List<Note> retrieveAllNotes() {
         try {
             final HttpResponse<String> response =
-                    Unirest.get(endpoint + "/getAll")
+                    Unirest.get(endpoint + "/getAll") //ToDO Add after implement authorization
 //                                                    .header("x-access-token", authToken)
                             .header(HttpHeaders.CONTENT_TYPE, "application/json")
-                            //                        .body(new Gson().toJson(strings))
                             .asObject(String.class);
             return deSerializeList(response.getBody());
         } catch (UnirestException e) {
@@ -56,12 +56,14 @@ public class RestConnector {
         }
     }
 
-    private List<Note> deSerializeList(String response){
+    private List<Note> deSerializeList(String response) {
+        //ToDo Implement deserialization of ArrayList is more pretty
         logger.debug(String.format("Response is %s", response));
         StringBuilder responseBody = new StringBuilder(response);
         responseBody.insert(0, "{\"notes\":");
         responseBody.append("}");
         ArrayList<Note> noteArrayList = new ArrayList<>();
+        //ToDo When only one object LinkedTreeMap cannot be cast to java.util.ArrayList
         for (LinkedTreeMap restNoteList : (ArrayList<LinkedTreeMap>)
                 new Gson().fromJson(responseBody.toString(), LinkedTreeMap.class).get("notes")) {
 //                Note note = new Gson().fromJson(restNoteList.toString(), Note.class);
@@ -72,35 +74,70 @@ public class RestConnector {
         return noteArrayList;
     }
 
-    /*public List<Note> retrieveByKeyWord(String keyWord) {
-        List<Note> noteArrayList = new ArrayList<>();
+    public List<Note> retrieveByKeyWord(String keyWord) {
         try {
             final HttpResponse<String> response =
-                    Unirest.post(endpoint + "/findNotes")
+                    Unirest.post(endpoint + "/retrieveByPartOfBody")
 //                                                    .header("x-access-token", authToken)
                             .header(HttpHeaders.CONTENT_TYPE, "application/json")
                             .body(keyWord)
                             .asObject(String.class);
-            //ToDo Implement  deserialization of ArrayList
-            StringBuilder responseBody = new StringBuilder(response.getBody());
-            responseBody.insert(0, "{\"notes\":");
-            responseBody.append("}");
-            LinkedTreeMap linkedTreeMap = new Gson().fromJson(responseBody.toString(), LinkedTreeMap.class);
-            logger.debug(String.format("Response is %s", responseBody));
-            for (LinkedTreeMap restNoteList : (ArrayList<LinkedTreeMap>) linkedTreeMap.get("notes")) {
-//                Note note = new Gson().fromJson(restNoteList.toString(), Note.class);
-                noteArrayList.add(new Note(restNoteList.get("id").toString(),
-                        restNoteList.get("name").toString(),
-                        restNoteList.get("message").toString()));
-            }
-            *//*if (linkedTreeMap == null) {
-            //ToDo return empty list
-            return null;
-            }*//*
+            return deSerializeList(response.getBody());
         } catch (UnirestException e) {
+            logger.error(e);
             e.printStackTrace();
             throw new IllegalStateException("Auth is not successful. Was not able to get result");
         }
-        return noteArrayList;
-    }*/
+    }
+
+    public String PutNote(String name, String msg) {
+        try {
+            final HttpResponse<String> response =
+                    Unirest.put(String.format("%s/putNote/%s", endpoint, name))
+//                                                    .header("x-access-token", authToken)
+                            .header(HttpHeaders.CONTENT_TYPE, "application/json")
+                            .body(msg)
+                            .asObject(String.class);
+            logger.debug("Putted note " + response.getBody());
+            return response.getBody();
+        } catch (UnirestException e) {
+            logger.error(e);
+            e.printStackTrace();
+            throw new IllegalStateException("Auth is not successful. Was not able to get result");
+        }
+    }
+
+    public boolean delByName(String name) {
+        try {
+            final HttpResponse<String> response =
+                    Unirest.delete(String.format("%s/delByName/%s", endpoint, name))
+//                                                    .header("x-access-token", authToken)
+                            .header(HttpHeaders.CONTENT_TYPE, "application/json")
+                            .asObject(String.class);
+            logger.debug("Deleted note \"" + name + "\"");
+            return response.getStatus()==HttpStatus.SC_NO_CONTENT;
+        } catch (UnirestException e) {
+            logger.error(e);
+            e.printStackTrace();
+            throw new IllegalStateException("Auth is not successful. Was not able to get result");
+        }
+    }
+
+    public boolean updateByName(String name, String body) {
+        try {
+            final HttpResponse<String> response =
+                    Unirest.post(String.format("%s/updateByName/%s", endpoint, name))
+//                                                    .header("x-access-token", authToken)
+                            .header(HttpHeaders.CONTENT_TYPE, "application/json")
+                            .body(body)
+                            .asObject(String.class);
+            logger.debug("Updated note \"" + name + "\" has new body \"" + body+ "\"");
+            return response.getStatus()==HttpStatus.SC_OK;
+        } catch (UnirestException e) {
+            logger.error(e);
+            e.printStackTrace();
+            throw new IllegalStateException("Auth is not successful. Was not able to get result");
+        }
+
+    }
 }

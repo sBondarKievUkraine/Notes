@@ -2,8 +2,6 @@ package com.company.server;
 
 import com.company.client.Note;
 import com.company.client.NotesService;
-import com.google.gson.Gson;
-import com.google.gson.internal.LinkedTreeMap;
 import com.google.gwt.user.server.rpc.RemoteServiceServlet;
 
 import java.util.ArrayList;
@@ -12,7 +10,7 @@ import java.util.UUID;
 
 public class NotesServiceImpl extends RemoteServiceServlet implements NotesService {
 
-    private static List<Note> notesList = new ArrayList<>();
+    /* private static List<Note> notesList = new ArrayList<>();
 
     static {
         //Initialize some Data
@@ -20,7 +18,7 @@ public class NotesServiceImpl extends RemoteServiceServlet implements NotesServi
         notesList.add(new Note("319c4140-e128-4c32-892b-0fb2ea7398fb", "Second note name", "Second message body"));
         notesList.add(new Note(UUID.randomUUID().toString(), "Third note name", "Third message body"));
         notesList.add(new Note(UUID.randomUUID().toString(), "Fourth note name", "Fourth message body"));
-    }
+    }*/
 
     private static RestConnector restConnector = new RestConnector();
 
@@ -28,17 +26,14 @@ public class NotesServiceImpl extends RemoteServiceServlet implements NotesServi
     }
 
     private Note findNoteByName(String name) {
-    }
+    }*/
 
     public String putNote(String noteName, String message) {
-    }*/
+        return restConnector.PutNote(noteName, message);
+    }
 
-    /*public String retrieveAllNotes() {
-        return notesList;
-    }*/
-
-    public String getMessage(String msg) {
-        return "getMessage";
+    public String deleteNoteByName(String delName) {
+        return restConnector.delByName(delName)?"Note deleted":"Note is not deleted";
     }
 
     public List<Note> retrieveAllNotes() {
@@ -46,15 +41,18 @@ public class NotesServiceImpl extends RemoteServiceServlet implements NotesServi
     }
 
     public List<Note> findByKeyWord(String keyWord) {
-        return null;
-//        return restConnector.retrieveByKeyWord(keyWord);
+        return restConnector.retrieveByKeyWord(keyWord);
+    }
+
+    public String updateNoteByName(String param, String noteBody) {
+        return restConnector.updateByName(param,noteBody)?"Note updated":"Note is not updated";
     }
 
      /*public Note getNoteById(String noteId) {
         return findNoteById(noteId);
     }
 
-    public Note getNoteByName(String noteName) {
+    public Note deleteNoteByName(String noteName) {
         return findNoteByName(noteName);
     }
 
@@ -64,8 +62,7 @@ public class NotesServiceImpl extends RemoteServiceServlet implements NotesServi
     public void deleteNoteByName(String noteName) {
     }
 
-    public void updateNoteByName(String param, String noteBody) {
-    }
+
 
     public void updateNoteById(String param, String noteBody) {
     }

@@ -7,24 +7,11 @@
         <servlet-name>com.company.Notes NotesService</servlet-name>
         <servlet-class>com.company.server.NotesServiceImpl</servlet-class>
     </servlet>
-    <!--
-        <servlet>
-            <servlet-name>com.google.gwt.sample.dynatable.DynaTable SchoolCalendarService</servlet-name>
-            <servlet-class>com.google.gwt.sample.dynatable.server.SchoolCalendarServiceImpl</servlet-class>
-        </servlet>
-    -->
     <servlet-mapping>
         <servlet-name>com.company.Notes NotesService</servlet-name>
         <url-pattern>/company/NotesService</url-pattern>
     </servlet-mapping>
-<!--
-    <servlet-mapping>
-        <servlet-name>com.google.gwt.sample.dynatable.DynaTable SchoolCalendarService</servlet-name>
-        <url-pattern>/dynatable/calendar</url-pattern>
-    </servlet-mapping>
--->
 
-    <!-- Default page to serve -->
     <welcome-file-list>
         <welcome-file>Notes.html</welcome-file>
     </welcome-file-list>

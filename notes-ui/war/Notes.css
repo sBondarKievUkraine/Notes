@@ -1,4 +1,4 @@
-body, td, a, div, table ,.p {
+body, td, a, div, .p {
     font-family: arial, sans-serif
 }
 
@@ -10,7 +10,7 @@ h1 {
 
 table {
     align: center;
-    border: 2px Black;
+    border: 1px Black;
     text-align: center;
 }
 

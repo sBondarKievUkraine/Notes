@@ -17,9 +17,9 @@ public class NotesService {
 
     static {
         //Initialize some Data
-        notesList.add(new Note("6fdc3f7b-a59c-4dcc-b2b0-1d171d3880bb", "First note name", "First message body"));
+        notesList.add(new Note("6fdc3f7b-a59c-4dcc-b2b0-1d171d3880bb", "First note name", "First message body contain keyword "));
         notesList.add(new Note("319c4140-e128-4c32-892b-0fb2ea7398fb", "Second note name", "Second message body"));
-        notesList.add(new Note(UUID.randomUUID().toString(), "Third note name", "Third message body"));
+        notesList.add(new Note(UUID.randomUUID().toString(), "Third note name", "Third message body contain keyword"));
         notesList.add(new Note(UUID.randomUUID().toString(), "Fourth note name", "Fourth message body"));
     }
 
@@ -87,37 +87,22 @@ public class NotesService {
     }
 
     public void deleteNoteByName(String noteName) {
-        for (Note note : NotesService.notesList) {
-            if (note.getName().equals(noteName)) {
-                NotesService.notesList.remove(note);
-            }
-        }
-        throw new NoteNotFoundException((format("Cannot find note with name: %s", noteName)));
+        Note note = findNoteByName(noteName);
+        NotesService.notesList.remove(note);
     }
 
     public void updateNoteByName(String param, String noteBody) {
-        for (Note note : notesList) {
-            if (note.getName().equals(param)) {
-                notesList.remove(note);
-                note.setMessage(noteBody);
-                notesList.add(note);
-                return;
-            }
-        }
-        throw new NoteNotFoundException((format("Cannot find note with name: %s", param)));
+        Note note = findNoteByName(param);
+        notesList.remove(note);
+        note.setMessage(noteBody);
+        notesList.add(note);
     }
 
     public void updateNoteById(String param, String noteBody) {
-        //Optional<Note> note = findNoteByName(param);
-        for (Note note : notesList) {
-            if (note.getId().equals(param)) {
-                notesList.remove(note);
-                note.setMessage(noteBody);
-                notesList.add(note);
-                return;
-            }
-        }
-        throw new NoteNotFoundException((format("Cannot find note with id: %s", param)));
+        Note note = findNoteById(param);
+        notesList.remove(note);
+        note.setMessage(noteBody);
+        notesList.add(note);
     }
 
     public List<Date> whenUpdates(String noteId) {

@@ -10,6 +10,6 @@
 
 
     <!-- Specify the app servlets.                   -->
-    <servlet path='/companyService' class='com.company.server.NotesServiceImpl'/>
+    <servlet path='/NotesService' class='com.company.server.NotesServiceImpl'/>
 
 </module>
